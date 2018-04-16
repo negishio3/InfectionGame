@@ -15,7 +15,7 @@ public class ChangeCollar_mase : MonoBehaviour
 
 
         //i = 0;
-        cube = GameObject.Find("mob").GetComponent<Renderer>();
+        //cube = GameObject.Find("mob").GetComponent<Renderer>();
 
 
     }
@@ -35,10 +35,14 @@ public class ChangeCollar_mase : MonoBehaviour
         //}
     }
 
-    public void OnTriggerEnter(Collider collider)
+    public void OnTriggerEnter(Collider other)
     {
-        cube.material.color = Color.red;
-        this.tag = ("Player");
+        if (other.tag == "Player")
+        {
+            cube = GameObject.Find("mob").GetComponent<Renderer>();
+            cube.material.color = Color.blue;
+            this.tag = ("Player");
+        }
     }
 
 }

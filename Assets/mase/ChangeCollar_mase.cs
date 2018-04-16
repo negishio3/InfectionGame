@@ -6,6 +6,7 @@ public class ChangeCollar_mase : MonoBehaviour
 {
     public Material[] _matrrial;
     private int i;
+    Renderer cube;
 
 
     // Use this for initialization
@@ -13,7 +14,9 @@ public class ChangeCollar_mase : MonoBehaviour
     {
 
 
-        i = 0;
+        //i = 0;
+        cube = GameObject.Find("Cube").GetComponent<Renderer>();
+
 
     }
 
@@ -32,6 +35,10 @@ public class ChangeCollar_mase : MonoBehaviour
         //}
     }
 
-
+    public void OnTriggerEnter(Collider collider)
+    {
+        cube.material.color = Color.red;
+        this.tag = ("Player");
+    }
 
 }

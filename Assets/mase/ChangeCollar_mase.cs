@@ -15,7 +15,7 @@ public class ChangeCollar_mase : MonoBehaviour
 
 
         //i = 0;
-        cube = GameObject.Find("Cube").GetComponent<Renderer>();
+        cube = GameObject.Find("mob").GetComponent<Renderer>();
 
 
     }

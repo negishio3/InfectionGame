@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23271860018322064}
   - component: {fileID: 54354309461211114}
   m_Layer: 0
-  m_Name: mob (B)
+  m_Name: mob(Y)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,7 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 53cb0de43942aec43986ffd7402667ad, type: 2}
+  - {fileID: 2100000, guid: 601775b9adf310d42a8c790d90e06771, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

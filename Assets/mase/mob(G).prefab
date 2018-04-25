@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23271860018322064}
   - component: {fileID: 54354309461211114}
   m_Layer: 0
-  m_Name: mob (G)
+  m_Name: mob(G)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

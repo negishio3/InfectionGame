@@ -4,14 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-<<<<<<< HEAD
   - Red
   - Blue
   - Green
   - Yellow
-=======
-  - Terrain
->>>>>>> origin/tkg
   layers:
   - Default
   - TransparentFX
@@ -21,7 +17,7 @@ TagManager:
   - UI
   - 
   - 
-  - Terrain
+  - 
   - 
   - 
   - 

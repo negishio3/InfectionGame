@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.AI;
 
-public class MobTest : MonoBehaviour
+public class MobTest : AIBase
 {
     public enum MobPattern
     {
@@ -15,39 +15,31 @@ public class MobTest : MonoBehaviour
     [SerializeField]
     private MobPattern mobPattern;
 
-    [SerializeField, Header("歩き移動速度")]
-    private float walkSpeed=1.5f;
-    [SerializeField, Header("走り移動速度")]
-    private float runSpeed=3.7f;
-    [SerializeField, Header("行動開始距離")]
+    [SerializeField]
     private int walkDistance;
     [SerializeField]
     private int runDistance;
 
-    private NavMeshAgent navMeshAgent;
-    private GameObject[] nearPlayer;
-    private Vector3 pos;
-    private Vector3 randomPos;
-    private float rad;
+    private Vector3 Mypos;
+    private Vector3 nextPos;
     private float RandomRunPosrange = 25;
     private float RandomWalkPosRange = 15;
-    private Vector3 Mypos;
-    [SerializeField]
-    private Vector3 nextPos;
     private float playerDistance;//プレイヤーと次の移動場所の距離
     private float nextPosDistance;//次の場所までの距離
     private float dis;//プレイヤーが近ければ0それ以外５
+    private int numberOfZombi;//変身するゾンビの番号
 
 
-    void Start()
+    protected override void Start()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        base.Start();
+        targetTag = "Player";
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        PlayerSearch();
+        base.Update();
         switch (mobPattern)
         {
             case MobPattern.WAIT:
@@ -59,69 +51,96 @@ public class MobTest : MonoBehaviour
             case MobPattern.RUN:
                 Run();
                 break;
-
         }
 
-        if (Vector3.Distance(nextPos,transform.position)<4||Mypos==nextPos||nextPos==Vector3.zero)
+        if (Vector3.Distance(nextPos, transform.position) < 4 || Mypos == nextPos || nextPos == Vector3.zero)
         {
             switch (mobPattern)
             {
                 case MobPattern.WAIT:
-                    Debug.Log("wait");
                     break;
                 case MobPattern.RUNDOMWAIK:
                     MoveRandom(RandomWalkPosRange);
                     break;
                 case MobPattern.RUN:
-                    Debug.Log("Run");
                     MoveRandom(RandomRunPosrange);
                     break;
             }
         }
-        if (Vector3.Distance(nearPlayer[0].transform.position, transform.position) < 5)
+
+        if (targetMobs.Any())
         {
-            dis = 0;
+            if (Vector3.Distance(targetMobs[0].transform.position, transform.position) < 5)
+            {
+                dis = 0;
+            }
+            else { dis = 5; }
         }
-        else { dis = 5; }
         Mypos = transform.position;
     }
 
-    void PlayerSearch()//Playerタグのobjを近い順に取得する
+    protected override void OnTriggerEnter(Collider col)
     {
-        if (GameObject.FindGameObjectWithTag("Player"))
-        {
-            nearPlayer = GameObject.FindGameObjectsWithTag("Player").
-            OrderBy(e => Vector3.Distance(transform.position, e.transform.position)).ToArray();
-        }
+        throw new System.NotImplementedException();
     }
 
 
     void Wait()
     {
-        if (Vector3.Distance(nearPlayer[0].transform.position, transform.position) < walkDistance)
+        if (targetMobs.Any())
         {
-            mobPattern = MobPattern.RUNDOMWAIK;
-            MoveRandom(RandomWalkPosRange);
-            navMeshAgent.speed = walkSpeed;
-            return;
+            if (Vector3.Distance(targetMobs[0].transform.position, transform.position) < walkDistance)
+            {
+                mobPattern = MobPattern.RUNDOMWAIK;
+                MoveRandom(RandomWalkPosRange);
+                navMeshAgent.speed = walkSpeed;
+                return;
+            }
         }
     }
 
     void RundomWalk()
     {
-        if (Vector3.Distance(nearPlayer[0].transform.position, transform.position) < runDistance)
+        if (targetMobs.Any())
         {
-            mobPattern = MobPattern.RUN;
-            MoveRandom(RandomRunPosrange);
-            navMeshAgent.speed = runSpeed;
-            return;
+            if (target)
+            {
+                if (Vector3.Distance(target.transform.position, transform.position) < runDistance)
+                {
+                    mobPattern = MobPattern.RUN;
+                    MoveRandom(RandomRunPosrange);
+                    navMeshAgent.speed = runSpeed;
+                    return;
+                }
+            }
+            //視界に入ってなくても逃げ始める
+            else if (Vector3.Distance(targetMobs[0].transform.position, transform.position) < runDistance / 2)
+            {
+                target = targetMobs[0];
+                mobPattern = MobPattern.RUN;
+                MoveRandom(RandomRunPosrange);
+                navMeshAgent.speed = runSpeed;
+                return;
+            }
         }
     }
 
     void Run()
-    {
-        if ((Vector3.Distance(nearPlayer[0].transform.position, transform.position) > runDistance))
         {
+        if (targetMobs.Any())
+        {
+            if ((Vector3.Distance(targetMobs[0].transform.position, transform.position) > runDistance))
+            {
+                target = null;
+                mobPattern = MobPattern.RUNDOMWAIK;
+                MoveRandom(RandomWalkPosRange);
+                navMeshAgent.speed = walkSpeed;
+                return;
+            }
+        }
+        else
+        {
+            target = null;
             mobPattern = MobPattern.RUNDOMWAIK;
             MoveRandom(RandomWalkPosRange);
             navMeshAgent.speed = walkSpeed;
@@ -149,9 +168,10 @@ public class MobTest : MonoBehaviour
     {
         if(GetRandomPosition(transform.position,range,out nextPos))
         {
-            playerDistance = Vector3.Distance(nearPlayer[0].transform.position, nextPos);
+            playerDistance = Vector3.Distance(targetMobs[0].transform.position, nextPos);
             nextPosDistance = Vector3.Distance(transform.position, nextPos);
 
+            //プレイヤーに近い位置ならやり直す
             if ((mobPattern==MobPattern.RUN&&playerDistance - dis < nextPosDistance )||
             (mobPattern == MobPattern.RUNDOMWAIK && playerDistance < runDistance+2))
             {

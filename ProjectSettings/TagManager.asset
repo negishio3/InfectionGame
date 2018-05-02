@@ -4,14 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-<<<<<<< HEAD
-  - Red
-  - Blue
-  - Green
-  - Yellow
-=======
-  - Terrain
->>>>>>> origin/tkg
+  - Mob
   layers:
   - Default
   - TransparentFX

@@ -4,10 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
+<<<<<<< HEAD
   - Red
   - Blue
   - Green
   - Yellow
+=======
+  - Mob
+>>>>>>> origin/takagi
   layers:
   - Default
   - TransparentFX

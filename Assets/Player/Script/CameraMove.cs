@@ -8,6 +8,7 @@ public class CameraMove : MonoBehaviour {
     [SerializeField, Header("最低回転角")]
     private float minAngle = -30;
 
+    private int playerNumber;
     private GameObject playerObj;
     private float rotspeed;
     private Vector3 roteuler;
@@ -15,6 +16,11 @@ public class CameraMove : MonoBehaviour {
     private RaycastHit rayhit;
     private bool isRendered;
 
+    public int PlayerNumber
+    {
+        get { return playerNumber; }
+        set { playerNumber = value; }
+    }
     public GameObject PlayerObj
     {
         get { return playerObj; }
@@ -35,7 +41,7 @@ public class CameraMove : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        float vertical= Input.GetAxis("Vertical2")*rotspeed;
+        float vertical= Input.GetAxis("VerticalR" + playerNumber.ToString()) *rotspeed;
         roteuler = new Vector3(Mathf.Clamp(roteuler.x - vertical, minAngle, maxAngle),transform.localEulerAngles.y,0f);
         transform.localEulerAngles = roteuler;
     }

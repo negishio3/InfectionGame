@@ -88,9 +88,9 @@ public class MobTest : MonoBehaviour
 
     void PlayerSearch()//Playerタグのobjを近い順に取得する
     {
-        if (GameObject.FindGameObjectWithTag("Player"))
+        if (GameObject.FindGameObjectWithTag("Red"))
         {
-            nearPlayer = GameObject.FindGameObjectsWithTag("Player").
+            nearPlayer = GameObject.FindGameObjectsWithTag("Red").
             OrderBy(e => Vector3.Distance(transform.position, e.transform.position)).ToArray();
         }
     }

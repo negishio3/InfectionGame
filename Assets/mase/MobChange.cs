@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class MobChange : MonoBehaviour
 { 
-   public GameObject[] _MobZombie;
-    void Start()
-    {
-        //_MobZombie[0] = (GameObject)Resources.Load("mob(R)");
-    }
-
     public void OnTriggerEnter(Collider other)
     {
         if (other.tag != transform.tag)
@@ -19,18 +13,19 @@ public class MobChange : MonoBehaviour
             switch (transform.tag)
             {
                 case "Red":
-                    Instantiate(_MobZombie[0], other.transform.position, Quaternion.identity);
+                    Instantiate(Resources.Load("MobFolder/mobRed"), other.transform.position, other.transform.rotation);
                     break;
                 case "Blue":
-                    Instantiate(_MobZombie[1], other.transform.position, Quaternion.identity);
+                    Instantiate(Resources.Load("MobFolder/mobBlue"), other.transform.position, other.transform.rotation);
                     break;
                 case "Green":
-                    Instantiate(_MobZombie[2], other.transform.position, Quaternion.identity);
+                    Instantiate(Resources.Load("MobFolder/mobGreen"), other.transform.position, other.transform.rotation);
                     break;
                 case "Yellow":
-                    Instantiate(_MobZombie[3], other.transform.position, Quaternion.identity);
+                    Instantiate(Resources.Load("MobFolder/mobYellow"), other.transform.position, other.transform.rotation);
                     break;
             }
+           
         }
     }
 }
